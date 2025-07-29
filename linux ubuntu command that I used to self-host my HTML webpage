@@ -1,0 +1,48 @@
+sudo apt update && apt upgrade
+ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+ sudo chmod +x /usr/local/bin/docker-compose
+ mkdir my-blog
+ cd my-blog
+sudo nano docker-compose.yml 
+                            ###this is the docker-compose.yml configuration!###
+version: '3'
+
+services:
+  site:
+    image: nginx:latest
+    volumes:
+      - ./site:/usr/share/nginx/html:ro      #site is my dir name yours will be diferent
+    networks:
+      - web
+
+  proxy:
+    image: nginx:latest
+    ports:
+      - "8081:80"
+    volumes:
+      - ./proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - site
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
+
+
+ sudo nano proxy.conf
+                                   ###this is the proxy.conf configuration!###
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://site;
+    }
+}
+
+chmod -R 755 site
+chmod 644 site/index.html
+docker compose down
+docker compose up -d
+
