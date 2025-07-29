@@ -2,6 +2,7 @@ sudo apt update && apt upgrade
  sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
  sudo chmod +x /usr/local/bin/docker-compose
  mkdir my-blog
+ mkdir site
  cd my-blog
 sudo nano docker-compose.yml 
                             ###this is the docker-compose.yml configuration!###
@@ -41,8 +42,9 @@ server {
     }
 }
 
-chmod -R 755 site
-chmod 644 site/index.html
+                          ###then I used FileZilla to transfer my HTML webpage to my ubuntu server/homelab###
+chmod -R 755 site         ###permision 7 the admin can read, write, access. 5 for the group and others can access but not write###
+chmod 644 site/index.html  ###permision  the admin can read, write. 4 read only
 docker compose down
 docker compose up -d
 
